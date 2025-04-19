@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,6 +9,7 @@ import {
 } from "@/components/ui/select";
 import { GeneratedPaper, PaperConfig } from "@/types/paper";
 import { formatCitation } from "@/utils/citationFormatter";
+import ReactMarkdown from "react-markdown";
 
 interface PaperPreviewProps {
   paper: GeneratedPaper;
@@ -20,7 +20,6 @@ const PaperPreview = ({ paper, config }: PaperPreviewProps) => {
   const [viewMode, setViewMode] = useState<"preview" | "plain">("preview");
 
   const downloadPaper = () => {
-    // In a real app, this would generate an actual file based on the output format
     alert(`Paper would be downloaded in ${config.outputFormat} format`);
   };
 
@@ -38,10 +37,7 @@ const PaperPreview = ({ paper, config }: PaperPreviewProps) => {
               <SelectItem value="plain">Plain Text</SelectItem>
             </SelectContent>
           </Select>
-          <Button 
-            className="bg-blue-700 hover:bg-blue-800"
-            onClick={downloadPaper}
-          >
+          <Button className="bg-blue-700 hover:bg-blue-800" onClick={downloadPaper}>
             Download {config.outputFormat}
           </Button>
         </div>
@@ -53,29 +49,37 @@ const PaperPreview = ({ paper, config }: PaperPreviewProps) => {
             <h1 className="text-2xl font-bold mb-4">{paper.title}</h1>
             <p className="text-gray-600 italic">Generated for academic purposes</p>
           </div>
-          
+
           <section className="mb-6">
             <h2 className="text-xl font-bold mb-2">Abstract</h2>
-            <p className="text-gray-800">{paper.abstract}</p>
+            <div className="prose prose-sm max-w-none text-gray-800">
+              <ReactMarkdown>{paper.abstract}</ReactMarkdown>
+            </div>
           </section>
-          
+
           <section className="mb-6">
             <h2 className="text-xl font-bold mb-2">Introduction</h2>
-            <div dangerouslySetInnerHTML={{ __html: paper.introduction }} />
+            <div className="prose prose-sm max-w-none">
+              <ReactMarkdown>{paper.introduction}</ReactMarkdown>
+            </div>
           </section>
-          
+
           {paper.sections.map((section, index) => (
             <section key={index} className="mb-6">
               <h2 className="text-xl font-bold mb-2">{section.title}</h2>
-              <div dangerouslySetInnerHTML={{ __html: section.content }} />
+              <div className="prose prose-sm max-w-none">
+                <ReactMarkdown>{section.content}</ReactMarkdown>
+              </div>
             </section>
           ))}
-          
+
           <section className="mb-6">
             <h2 className="text-xl font-bold mb-2">Conclusion</h2>
-            <div dangerouslySetInnerHTML={{ __html: paper.conclusion }} />
+            <div className="prose prose-sm max-w-none">
+              <ReactMarkdown>{paper.conclusion}</ReactMarkdown>
+            </div>
           </section>
-          
+
           <section>
             <h2 className="text-xl font-bold mb-4">References</h2>
             <ul className="space-y-2 list-none">
@@ -91,24 +95,24 @@ const PaperPreview = ({ paper, config }: PaperPreviewProps) => {
         <div className="bg-gray-100 p-4 font-mono text-sm whitespace-pre-wrap rounded overflow-auto max-h-[70vh]">
           <div>
             # {paper.title}
-            
+
             ## Abstract
-            
             {paper.abstract}
-            
+
             ## Introduction
-            
             {paper.introduction.replace(/<[^>]*>/g, '')}
-            
-            {paper.sections.map((section) => `## ${section.title}\n\n${section.content.replace(/<[^>]*>/g, '')}\n\n`).join('')}
-            
+
+            {paper.sections.map((section) =>
+              `## ${section.title}\n\n${section.content.replace(/<[^>]*>/g, '')}\n\n`
+            ).join("")}
+
             ## Conclusion
-            
             {paper.conclusion.replace(/<[^>]*>/g, '')}
-            
+
             ## References
-            
-            {paper.references.map((ref, i) => `${i+1}. ${formatCitation(ref, config.citationStyle).replace(/<[^>]*>/g, '')}\n`).join('')}
+            {paper.references.map((ref, i) =>
+              `${i + 1}. ${formatCitation(ref, config.citationStyle).replace(/<[^>]*>/g, '')}\n`
+            ).join("")}
           </div>
         </div>
       )}

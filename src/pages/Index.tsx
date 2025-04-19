@@ -6,6 +6,9 @@ import PaperForm from "@/components/PaperForm";
 import PaperPreview from "@/components/PaperPreview";
 import ResearchPaperGenerator from "@/components/ResearchPaperGenerator";
 import { PaperConfig, GeneratedPaper } from "@/types/paper";
+import { generatePaperFromAPI } from "@/lib/api"; // update path if needed
+
+
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("form");
@@ -17,13 +20,16 @@ const Index = () => {
     setPaperConfig(config);
     setIsGenerating(true);
     setActiveTab("preview");
-    
-    // Simulate paper generation (in real app, this would call APIs)
-    setTimeout(() => {
-      const paper = ResearchPaperGenerator.generatePaper(config);
+  
+    try {
+      const paper = await generatePaperFromAPI(config);
       setGeneratedPaper(paper);
+    } catch (error) {
+      console.error("Error generating paper:", error);
+      alert("Failed to generate paper. Please try again.");
+    } finally {
       setIsGenerating(false);
-    }, 3000);
+    }
   };
 
   return (
@@ -34,7 +40,7 @@ const Index = () => {
             <h1 className="text-3xl md:text-4xl font-serif font-bold">Academic Paper Generator</h1>
             <p className="mt-2 text-blue-100">AI-powered research assistant for generating high-quality academic papers</p>
           </div>
-          <Button variant="outline" className="text-white hover:text-blue-900" onClick={() => window.location.href = "/my-papers"}>
+          <Button variant="outline" className="bg-white text-slate-800 hover:bg-slate-200 hover:text-slate-900 transition" onClick={() => window.location.href = "/my-papers"}>
             My Papers
           </Button>
         </div>

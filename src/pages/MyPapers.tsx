@@ -1,45 +1,48 @@
-
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+// ✅ Updated MyPapers.tsx to fetch live papers from backend
+import { useEffect, useState } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Book } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
+interface Paper {
+  id: number;
+  title: string;
+  abstract: string;
+  created_at: string;
+}
+
 const MyPapers = () => {
   const navigate = useNavigate();
-  
-  // Sample data for papers
-  const papers = [
-    {
-      id: 1,
-      title: "The Impact of AI on Modern Society",
-      date: "2025-04-19",
-      status: "Completed",
-    },
-    {
-      id: 2,
-      title: "Climate Change and Global Economics",
-      date: "2025-04-18",
-      status: "In Progress",
-    },
-  ];
+  const [papers, setPapers] = useState<Paper[]>([]);
+
+  useEffect(() => {
+    const user_id = localStorage.getItem("user_id");
+    if (!user_id) return;
+
+    fetch(`http://127.0.0.1:8000/papers?user_id=${user_id}`)
+      .then((res) => res.json())
+      .then(setPapers)
+      .catch((err) => console.error("Error fetching papers:", err));
+  }, []);
 
   const handleDownload = (paperId: number) => {
-    // Simple mock download - in a real app this would download the actual paper
-    console.log("Downloading paper:", paperId);
-    
-    // Create a fake PDF content
-    const content = "This is a sample paper content for paper ID: " + paperId;
-    
-    // Create a Blob with the content
-    const blob = new Blob([content], { type: 'text/plain' });
-    
-    // Create a link element
+    const paper = papers.find((p) => p.id === paperId);
+    if (!paper) return;
+
+    const content = `${paper.title}\n\n${paper.abstract}`;
+    const blob = new Blob([content], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
     link.download = `paper-${paperId}.txt`;
-    
-    // Append to the document, click and remove
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -50,12 +53,9 @@ const MyPapers = () => {
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Book className="h-6 w-6" />
-            My Generated Papers
+            <Book className="h-6 w-6" /> My Generated Papers
           </h1>
-          <Button onClick={() => navigate("/")}>
-            Generate New Paper
-          </Button>
+          <Button onClick={() => navigate("/")}>Generate New Paper</Button>
         </div>
 
         <div className="bg-white rounded-lg shadow">
@@ -72,13 +72,10 @@ const MyPapers = () => {
               {papers.map((paper) => (
                 <TableRow key={paper.id}>
                   <TableCell className="font-medium">{paper.title}</TableCell>
-                  <TableCell>{paper.date}</TableCell>
-                  <TableCell>{paper.status}</TableCell>
+                  <TableCell>{new Date(paper.created_at).toLocaleDateString()}</TableCell>
+                  <TableCell>Completed</TableCell>
                   <TableCell className="text-right">
-                    <Button
-                      variant="outline"
-                      onClick={() => handleDownload(paper.id)}
-                    >
+                    <Button variant="outline" onClick={() => handleDownload(paper.id)}>
                       Download
                     </Button>
                   </TableCell>
