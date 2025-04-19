@@ -40,9 +40,9 @@ const Index = () => {
             <h1 className="text-3xl md:text-4xl font-serif font-bold">Academic Paper Generator</h1>
             <p className="mt-2 text-blue-100">AI-powered research assistant for generating high-quality academic papers</p>
           </div>
-          <Button variant="outline" className="bg-white text-slate-800 hover:bg-slate-200 hover:text-slate-900 transition" onClick={() => window.location.href = "/my-papers"}>
+          {/* <Button variant="outline" className="bg-white text-slate-800 hover:bg-slate-200 hover:text-slate-900 transition" onClick={() => window.location.href = "/my-papers"}>
             My Papers
-          </Button>
+          </Button> */}
         </div>
       </header>
       
