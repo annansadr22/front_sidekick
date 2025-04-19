@@ -2,9 +2,12 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Book } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const MyPapers = () => {
-  // TODO: Replace with actual data fetching
+  const navigate = useNavigate();
+  
+  // Sample data for papers
   const papers = [
     {
       id: 1,
@@ -21,8 +24,25 @@ const MyPapers = () => {
   ];
 
   const handleDownload = (paperId: number) => {
-    // TODO: Implement actual download logic
+    // Simple mock download - in a real app this would download the actual paper
     console.log("Downloading paper:", paperId);
+    
+    // Create a fake PDF content
+    const content = "This is a sample paper content for paper ID: " + paperId;
+    
+    // Create a Blob with the content
+    const blob = new Blob([content], { type: 'text/plain' });
+    
+    // Create a link element
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `paper-${paperId}.txt`;
+    
+    // Append to the document, click and remove
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -33,7 +53,7 @@ const MyPapers = () => {
             <Book className="h-6 w-6" />
             My Generated Papers
           </h1>
-          <Button onClick={() => window.location.href = "/"}>
+          <Button onClick={() => navigate("/")}>
             Generate New Paper
           </Button>
         </div>

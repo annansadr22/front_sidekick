@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Eye, EyeOff } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -14,11 +15,12 @@ const Login = () => {
     password: "",
     confirmPassword: "",
   });
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement actual authentication logic
-    console.log("Form submitted:", formData);
+    // Just navigate to home page without checking credentials
+    navigate("/");
   };
 
   return (
@@ -41,7 +43,6 @@ const Login = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value })
                 }
-                required
               />
             </div>
             
@@ -56,7 +57,6 @@ const Login = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, password: e.target.value })
                   }
-                  required
                 />
                 <button
                   type="button"
@@ -84,7 +84,6 @@ const Login = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, confirmPassword: e.target.value })
                     }
-                    required
                   />
                 </div>
               </div>
