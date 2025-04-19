@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -30,9 +29,14 @@ const Index = () => {
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
       <header className="bg-gradient-to-r from-blue-700 to-blue-900 text-white p-6 shadow-md">
-        <div className="container mx-auto">
-          <h1 className="text-3xl md:text-4xl font-serif font-bold">Academic Paper Generator</h1>
-          <p className="mt-2 text-blue-100">AI-powered research assistant for generating high-quality academic papers</p>
+        <div className="container mx-auto flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-serif font-bold">Academic Paper Generator</h1>
+            <p className="mt-2 text-blue-100">AI-powered research assistant for generating high-quality academic papers</p>
+          </div>
+          <Button variant="outline" className="text-white hover:text-blue-900" onClick={() => window.location.href = "/my-papers"}>
+            My Papers
+          </Button>
         </div>
       </header>
       
