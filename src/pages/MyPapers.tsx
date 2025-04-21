@@ -27,7 +27,7 @@ const MyPapers = () => {
     const user_id = localStorage.getItem("user_id");
     if (!user_id) return;
 
-    fetch(`http://127.0.0.1:8000/papers?user_id=${user_id}`)
+    fetch(`https://ai-research-sidekick.onrender.com/papers?user_id=${user_id}`)
       .then((res) => res.json())
       .then(setPapers)
       .catch((err) => console.error("Error fetching papers:", err));

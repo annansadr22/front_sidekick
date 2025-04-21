@@ -28,7 +28,7 @@ const Login = () => {
     e.preventDefault();
     const endpoint = isLogin ? "/login" : "/signup";
 
-    const response = await fetch(`http://127.0.0.1:8000${endpoint}`, {
+    const response = await fetch(`https://ai-research-sidekick.onrender.com${endpoint}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: formData.email, password: formData.password }),
